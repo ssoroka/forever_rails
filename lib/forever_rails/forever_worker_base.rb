@@ -1,3 +1,5 @@
+require "active_support/core_ext/class/attribute_accessors"
+
 class ForeverWorkerBase
   cattr_accessor :timespan
   def self.every(time)
