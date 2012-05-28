@@ -2,8 +2,8 @@ class ForeverForkWorker < ForeverWorkerBase
   attr_accessor :pid
 
   def stop!
-    @stopped = true
-    Process.kill(:INT, @pid)
+    super
+    Process.kill(:INT, @pid) if @pid
   end
 
   def run_forever
@@ -13,20 +13,8 @@ class ForeverForkWorker < ForeverWorkerBase
       trap_signals
       logger.info("Started new #{self.class.name} worker")
 
-      last_run = 0
-      while !stopped
-        now = Time.now.to_i
-        if now - last_run > @@timespan
-          last_run = now
-          begin
-            run
-          rescue StandardError => e
-            logger.error("Caught #{e.class.name} while running #{self.class.name}: #{e.message}\n--  #{e.backtrace.join("\n--  ")}")
-          end
-        else
-          sleep 1
-        end
-      end
+      super
+
       logger.info("Stopping #{self.class.name} worker")
     end
   end
@@ -35,7 +23,7 @@ class ForeverForkWorker < ForeverWorkerBase
     Process.wait(@pid)
   end
 
-  def reopen_log
+  def reopen_logs
     
   end
 
