@@ -14,4 +14,5 @@ Gem::Specification.new do |gem|
   gem.name          = "forever_rails"
   gem.require_paths = ["lib"]
   gem.version       = ForeverRails::VERSION
+  gem.add_dependency('activesupport', '>=3.0.0')
 end
